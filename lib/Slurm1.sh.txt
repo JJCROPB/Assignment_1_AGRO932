@@ -30,7 +30,7 @@ bwa index sal.fa
 bwa mem sal.fa l1.R1.fq l1.R2.fq | samtools view -bSh - > l1.bam
 
 # alignment for 5 individuals
-for i in {1..5}; do bwa mem sal.fa l$i.R1.fq l$i.R2.fq | samtools view -bSh - > l$i.bam; done
+for i in {1..10}; do bwa mem sal.fa l$i.R1.fq l$i.R2.fq | samtools view -bSh - > l$i.bam; done
 # sort
 for i in *.bam; do samtools sort $i -o sorted_$i; done
 # index them
@@ -42,7 +42,7 @@ for i in sorted*.bam; do samtools index $i; done
 samtools faidx sal.fa
 
 ### run 'mpileup' to generate VCF format
-samtools mpileup -g -f sal.fa sorted_l1.bam sorted_l2.bam sorted_l3.bam sorted_l4.bam sorted_l5.bam > myraw.bcf
+samtools mpileup -g -f sal.fa sorted_l1.bam sorted_l2.bam sorted_l3.bam sorted_l4.bam sorted_l5.bam sorted> myraw.bcf
 ### Call SNP using bcftools `call` function
 bcftools call myraw.bcf -cv -Ob -o snps.bcf
 ### Extract allele frequency at each position

@@ -23,29 +23,28 @@ wc -l l1.R1.fq
 
 # to do the alignment
 module load bwa samtools bcftools
+# index the reference genome
+bwa index sal.fa
+# using bwa mem to align the reads to the reference genome 
+# => samtools to convert into bam file
+bwa mem sal.fa l1.R1.fq l1.R2.fq | samtools view -bSh - > l1.bam
 
-bwa index Arabidopsis_thaliana.TAIR10.dna.chromosome.Mt.fa
-
-
-# alignment
-for i in {1..20}; do bwa mem Arabidopsis_thaliana.TAIR10.dna.chromosome.Mt.fa l$i.R1.fq l$i.R2.fq | samtools view -bSh - > l$i.bam; done
+# alignment for 5 individuals
+for i in {1..5}; do bwa mem sal.fa l$i.R1.fq l$i.R2.fq | samtools view -bSh - > l$i.bam; done
 # sort
 for i in *.bam; do samtools sort $i -o sorted_$i; done
 # index them
 for i in sorted*.bam; do samtools index $i; done
 
-### check mapping statistics
-samtools flagstat sorted_l1.bam
+#to calling SNPS
 
 ### index the genome assembly
-samtools faidx Arabidopsis_thaliana.TAIR10.dna.chromosome.Mt.fa
-
+samtools faidx sal.fa
 
 ### run 'mpileup' to generate VCF format
-ls sorted_l*bam > bamlist.txt
-samtools mpileup -g -f Arabidopsis_thaliana.TAIR10.dna.chromosome.Mt.fa -b bamlist.txt > myraw.bcf
+samtools mpileup -g -f sal.fa sorted_l1.bam sorted_l2.bam sorted_l3.bam sorted_l4.bam sorted_l5.bam sorted_l6.bam sorted_l7.bam sorted_l8.bam sorted_l9.bam sorted_l10.bam> myraw.bcf
+### Call SNP using bcftools `call` function
 bcftools call myraw.bcf -cv -Ob -o snps.bcf
-
 ### Extract allele frequency at each position
 bcftools query -f '%CHROM %POS %AF1\n' snps.bcf > frq.txt
 bcftools query -f '%CHROM %POS %REF %ALT [\t%GT]\n' snps.bcf > geno.txt
