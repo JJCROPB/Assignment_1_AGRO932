@@ -1,0 +1,88 @@
+---
+title: '932'
+author: "Juan Jimenez"
+date: '2022-03-03'
+output: html_document
+---
+
+```{r}
+wright_fisher <- function(N=1000, A1=100, t=1000){
+  p <- A1/(2*N)
+  ### make a numeric vector to hold the results
+  freq <- as.numeric();
+  t=1000
+  ### Use for loop to run over t generations
+  for (i in 1:t){
+    A1 <- rbinom(1, 2*N, p)
+    p <- A1/(2*N)
+    freq[i] <- p
+  }
+  return(freq)
+}
+set.seed(1234)
+frq <- wright_fisher(N=1000, A1=100, t=1000)
+pdf("graphs/sim1000.pdf", width=8, height=8)
+plot(frq, type="l", ylim=c(0,1), col=3, xlab="Generations", ylab=expression(p(A[1])))
+    for(u in 1:1000){
+      frq <- wright_fisher(N=1000, A1=100, t=1000)
+      random <- sample(1:1000,1,replace=F)
+      randomcolor <- colors()[random] 
+      lines(frq,type="l",col=(randomcolor))
+    }
+dev.off()
+git add --all
+git commit -m "sim 1000 fig"
+git push
+
+```
+
+
+```{r}
+pi <- function(n=10, p=0.1){
+  return(n/(n-1)*(1-p^2-(1-p)^2))
+}
+pi(n=10, p=0.1)
+frq <- read.table("largedata/frq.txt")
+
+maf <- c(0.1, 0.1, 0.3, 0.1, 0.3, 0.2, 0.1, 0.4, 0.1, 0.1)
+sfs <- table(maf)
+barplot(sfs, col="#cdc0b0", xlab="Minor allele frequency", 
+        ylab="No. of segregating sites", 
+        cex.axis =1.5, cex.names = 1.5, cex.lab=1.5)
+
+
+```
+
+
+```{r}
+#3. Calculate the Fst value for each site and visualize the results
+geno <- read.table("largedata/geno.txt", header=FALSE)
+names(geno) <- c("chr", "pos", "ref", "alt", "l1", "l2", "l3", "l4", "l5")
+for(i in 5:9){
+  # replace slash and everything after it as nothing
+  geno$newcol <- gsub("/.*", "", geno[,i] )
+  # extract the line name
+  nm <- names(geno)[i]
+  # assign name for this allele
+  names(geno)[ncol(geno)] <- paste0(nm, sep="_a1")
+  geno$newcol <- gsub(".*/", "", geno[,i] )
+  names(geno)[ncol(geno)] <- paste0(nm, sep="_a2")
+}
+
+geno$p <- apply(geno[, 10:19], 1, function(x) {sum(as.numeric(as.character(x)))})
+geno$p <- geno$p/10
+geno$p1 <- apply(geno[, 10:15], 1, function(x) {sum(as.numeric(as.character(x)))})
+geno$p1 <- geno$p1/6
+geno$p2 <- apply(geno[, 16:19], 1, function(x) {sum(as.numeric(as.character(x)))})
+geno$p2 <- geno$p2/4
+
+geno$fst <- with(geno, ((p1-p)^2 + (p2-p)^2)/(2*p*(1-p)) )
+
+write.table(geno, "cache/fst.csv", sep=",", row.names = FALSE, quote=FALSE)
+
+fst <- read.csv("cache/fst.csv")
+plot(fst$pos, fst$fst, xlab="Physical position", ylab="Fst value", main="")
+
+
+
+```
