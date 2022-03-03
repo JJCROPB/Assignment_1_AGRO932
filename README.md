@@ -5,7 +5,7 @@
 ###### -First, I create this repository including some directories to organize the files
 ###### -Then, I cloned this repository in CRANE, a high performance cluster from UNL
 ###### -After that, I cloned and instaled the software wgsim into the repository in CRANE https://github.com/lh3/wgsim
-###### -Once it was cloned, I downloaded the reference genome with 4481 bp and place it into the repository in CRANE https://www.ncbi.nlm.nih.gov/nuccore/216643
+###### -Once it was cloned, I downloaded the reference genome with 1491 bp and place it into the repository in CRANE https://www.ncbi.nlm.nih.gov/nuccore/NR_041696.1
 ###### -With the reference genome and the software installed, I ran this code to perform the data simulation using wgsim ecoli.fasta -N 100 -1 60 -2 60 -r 0.1 -e 0 \ -R 0 -X 0 -S 1000000 doc/l1.R1.fq doc/l1.R2.fq
 ###### -After getting this, I ran a simulation for 10 individuals using this code: for i in {1..10}
 do
