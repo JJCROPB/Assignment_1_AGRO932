@@ -8,8 +8,6 @@
 set -e
 set -u
 
-cd data/
-
 wgsim sal.fa -N 5000 -1 100 -2 100 -r 0.01 -e 0 \
 -R 0 -X 0 -S 1234567 l1.R1.fq l1.R2.fq
 
