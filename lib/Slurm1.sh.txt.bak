@@ -1,25 +1,27 @@
 #!/bin/bash -l
 #SBATCH -D /home/frelslab/juandj/assignment/Assignment_1_AGRO932/
-#SBATCH -o /home/frelslab/juandj/assignment/Assignment_1_AGRO932/data/sal_out.txt
-#SBATCH -e /home/frelslab/juandj/assignment/Assignment_1_AGRO932/data/sal_err.txt
+#SBATCH -o /home/frelslab/juandj/assignment/Assignment_1_AGRO932/data/out/sal_out.txt
+#SBATCH -e /home/frelslab/juandj/assignment/Assignment_1_AGRO932/data/out/sal_err.txt
 #SBATCH -J juan
 #SBATCH -t 24:00:00
 
 set -e
 set -u
 
-cd data/out/
+cd data/
 
-wgsim Arabidopsis_thaliana.TAIR10.dna.chromosome.Mt.fa -N 5000 -1 100 -2 100 -r 0.01 -e 0 \
+wgsim sal.fa -N 5000 -1 100 -2 100 -r 0.01 -e 0 \
 -R 0 -X 0 -S 1234567 l1.R1.fq l1.R2.fq
 
 for i in {1..10}
 do
-   wgsim Arabidopsis_thaliana.TAIR10.dna.chromosome.Mt.fa -N 5000 -1 100 -2 100 -r 0.01 -e 0 -R 0 -X 0 l$i.R1.fq l$i.R2.fq
+   wgsim sal.fa -N 5000 -1 100 -2 100 -r 0.01 -e 0 -R 0 -X 0 l$i.R1.fq l$i.R2.fq
 done
-# check how many reads
+# to check how many reads
 wc -l l1.R1.fq
 
+
+# to do the alignment
 module load bwa samtools bcftools
 
 bwa index Arabidopsis_thaliana.TAIR10.dna.chromosome.Mt.fa
