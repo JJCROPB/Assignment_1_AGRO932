@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#SBATCH -D /home/frelslab/juandj/assignment/Assignment_1_AGRO932/data/out
+#SBATCH -D /home/frelslab/juandj/assignment/Assignment_1_AGRO932/data/
 #SBATCH -o /home/frelslab/juandj/assignment/Assignment_1_AGRO932/data/out/sal_out.txt
 #SBATCH -e /home/frelslab/juandj/assignment/Assignment_1_AGRO932/data/out/sal_err.txt
 #SBATCH -J juan
@@ -25,16 +25,16 @@ wc -l l1.R1.fq
 module load bwa samtools bcftools
 # index the reference genome
 bwa index sal.fa
-# using bwa mem to align the reads to the reference genome 
-# => samtools to convert into bam file
-bwa mem sal.fa l1.R1.fq l1.R2.fq | samtools view -bSh - > l1.bam
 
-# alignment for 5 individuals
-for i in {1..10}; do bwa mem sal.fa l$i.R1.fq l$i.R2.fq | samtools view -bSh - > l$i.bam; done
+# alignment for 20 individuals
+for i in {1..20}; do bwa mem sal.fa l$i.R1.fq l$i.R2.fq | samtools view -bSh - > l$i.bam; done
 # sort
 for i in *.bam; do samtools sort $i -o sorted_$i; done
 # index them
 for i in sorted*.bam; do samtools index $i; done
+
+### check mapping statistics
+samtools flagstat sorted_l1.bam
 
 #to calling SNPS
 

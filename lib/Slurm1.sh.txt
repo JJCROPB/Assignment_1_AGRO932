@@ -2,7 +2,7 @@
 #SBATCH -D /home/frelslab/juandj/assignment/Assignment_1_AGRO932/data/
 #SBATCH -o /home/frelslab/juandj/assignment/Assignment_1_AGRO932/data/out/sal_out.txt
 #SBATCH -e /home/frelslab/juandj/assignment/Assignment_1_AGRO932/data/out/sal_err.txt
-#SBATCH -J juan
+#SBATCH -J jj
 #SBATCH -t 24:00:00
 
 set -e
@@ -40,6 +40,9 @@ samtools flagstat sorted_l1.bam
 
 ### index the genome assembly
 samtools faidx sal.fa
+
+### run 'mpileup' to generate VCF format
+ls sorted_l*bam > bamlist.txt
 
 ### run 'mpileup' to generate VCF format
 samtools mpileup -g -f sal.fa sorted_l1.bam sorted_l2.bam sorted_l3.bam sorted_l4.bam sorted_l5.bam sorted> myraw.bcf
