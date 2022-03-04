@@ -6,45 +6,10 @@ output: html_document
 ---
 
 ```{r}
-#3. Calculate the Fst value for each site and visualize the results
-geno <- read.table("largedata/geno.txt", header=FALSE)
-names(geno) <- c("chr", "pos", "ref", "alt", "l1", "l2", "l3", "l4", "l5")
-for(i in 5:9){
-  # replace slash and everything after it as nothing
-  geno$newcol <- gsub("/.*", "", geno[,i] )
-  # extract the line name
-  nm <- names(geno)[i]
-  # assign name for this allele
-  names(geno)[ncol(geno)] <- paste0(nm, sep="_a1")
-  geno$newcol <- gsub(".*/", "", geno[,i] )
-  names(geno)[ncol(geno)] <- paste0(nm, sep="_a2")
-}
-
-geno$p <- apply(geno[, 10:19], 1, function(x) {sum(as.numeric(as.character(x)))})
-geno$p <- geno$p/10
-geno$p1 <- apply(geno[, 10:15], 1, function(x) {sum(as.numeric(as.character(x)))})
-geno$p1 <- geno$p1/6
-geno$p2 <- apply(geno[, 16:19], 1, function(x) {sum(as.numeric(as.character(x)))})
-geno$p2 <- geno$p2/4
-
-geno$fst <- with(geno, ((p1-p)^2 + (p2-p)^2)/(2*p*(1-p)) )
-
-write.table(geno, "cache/fst.csv", sep=",", row.names = FALSE, quote=FALSE)
-
-fst <- read.csv("cache/fst.csv")
-plot(fst$pos, fst$fst, xlab="Physical position", ylab="Fst value", main="")
-
-
-
-```
-
-#from here
-
-```{r}
 #setup working directory
 setwd("D:/Documents/GitHub/Assignment_1_AGRO932/")
 #reading the sequence data
-geno <- read.table("geno.txt", header=FALSE)
+geno <- read.table("data/geno.txt", header=FALSE)
 
 ```
 
@@ -100,9 +65,9 @@ write.table(geno, "fst.csv", sep=",", row.names = FALSE, quote=FALSE)
 #to plot the fst values
 fst <- read.csv("fst.csv")
 #to save as a pdf
-pdf(file = "graphs/Fst_wmutation10.PDF",   # The directory you want to save the file in
+pdf(file = "Fst_wmutation10.PDF",   # The directory you want to save the file in
     width = 4, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 plot(fst$pos, fst$fst, xlab="Physical position", ylab="Fst value", main="")
-dev.off()
+
 ```
