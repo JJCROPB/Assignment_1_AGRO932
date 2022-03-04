@@ -4,7 +4,7 @@
 #SBATCH -e /home/frelslab/juandj/assignment/Assignment_1_AGRO932/data/out/salmon_err.txt
 #SBATCH -J salmon
 #SBATCH -t 24:00:00
-
+s
 set -e
 set -u
 
