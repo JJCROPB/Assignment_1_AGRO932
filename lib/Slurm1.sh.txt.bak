@@ -2,13 +2,13 @@
 #SBATCH -D /home/frelslab/juandj/assignment/Assignment_1_AGRO932/data
 #SBATCH -o /home/frelslab/juandj/assignment/Assignment_1_AGRO932/data/out/sal_out.txt
 #SBATCH -e /home/frelslab/juandj/assignment/Assignment_1_AGRO932/data/out/sal_err.txt
-#SBATCH -J hw1_arab
+#SBATCH -J hw1_sal
 #SBATCH -t 24:00:00
 
 set -e
 set -u
 
-cd/ data
+cd ../data/
 
 wgsim sal.fa -N 5000 -1 100 -2 100 -r 0.01 -e 0 \
 -R 0 -X 0 -S 1234567 l1.R1.fq l1.R2.fq
