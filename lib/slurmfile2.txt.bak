@@ -10,12 +10,12 @@ set -u
 
 cd ../data/
 #first simulation
-wgsim salmon.fasta -N 1000 -1 100 -2 100 -r 0.01 -e 0 \
+wgsim salmon.fasta -N 1000 -1 100 -2 100 -r 0.2 -e 0 \
 -R 0 -X 0 -S 1234567 l1.R1.fq l1.R2.fq
 
 for i in {1..10}
 do
-   wgsim salmon.fasta -N 1000 -1 100 -2 100 -r 0.01 -e 0 -R 0 -X 0 l$i.R1.fq l$i.R2.fq
+   wgsim salmon.fasta -N 1000 -1 100 -2 100 -r 0.2 -e 0 -R 0 -X 0 l$i.R1.fq l$i.R2.fq
 done
 # check how many reads
 wc -l l1.R1.fq
